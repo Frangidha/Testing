@@ -3,7 +3,6 @@ from google.oauth2.service_account import Credentials
 import numpy as np
 import os
 import sys
-import pandas as pd
 import plotext
 """
 the app is connected via API to google sheets for easy access to the old data. 
@@ -124,7 +123,7 @@ def calculate_integration_area(integration_row, intLim1, intLim2, intLim3):
     return integration_row
 
 
-def calculate_ratio(Calculated_index):
+def calculate_ratio(Calculated_index, Sample):
     """
     Calculate the ratio index for each item type. 
     getting the integration values from google sheet 
@@ -135,10 +134,10 @@ def calculate_ratio(Calculated_index):
     Calculated_index = []
     integration_data = SHEET.worksheet("Integrated_Data").get_all_values()   
     data = integration_data[-1]
-    int1 = int(data[1])
-    int2 = int(data[2])
-    int3 = int(data[3])
-    Calculated_index.append(sample)
+    int1 = int(data[0])
+    int2 = int(data[1])
+    int3 = int(data[2])
+    Calculated_index.append(Sample)
     Ratio1 = int2/int1
     Calculated_index.append(Ratio1)
     Ratio2 = int3/int1
@@ -149,7 +148,7 @@ def calculate_ratio(Calculated_index):
     return Calculated_index
 
 
-def ratio_evaluation(High_Limit, Low_Limit, High_index, Medium_index, Low_index):
+def ratio_evaluation(Sample,High_Limit, Low_Limit, High_index, Medium_index, Low_index):
 
     """
     it takes the calculated data afterwards it give 
@@ -168,12 +167,12 @@ def ratio_evaluation(High_Limit, Low_Limit, High_index, Medium_index, Low_index)
     for i in range(len(data)):
         data[i] = data[i].replace(",", ".")
     
-    ratio1 = float(data[0])
-    ratio2 = float(data[1])
-    ratio3 = float(data[2])
+    ratio1 = float(data[1])
+    ratio2 = float(data[2])
+    ratio3 = float(data[3])
 
-    print("{:<10} {:<10} {:<10} {:<10}".format(header1, header2, header3))
-    print("{:<10}{:<10} {:<10} {:<10}".format(round(ratio1, 2), round(ratio2, 2), round(ratio3, 2)))
+    print("{:<10} {:<10} {:<10} {:<10}".format(header, header1, header2, header3))
+    print("{:<10} {:<10} {:<10} {:<10}".format(Sample , round(ratio1, 2), round(ratio2, 2), round(ratio3, 2)))
     data_evaluation = {}
     print("Data Interpretation")
 
@@ -269,7 +268,7 @@ def get_sample_name():
     sample = sample_column[-1]
     return sample
 
-def get_last_5_entires_ratio_values():
+def get_last_5_entires_ratio_values(column_number):
     """
     Collect columns of data from sales worksheet.
     Get the last 5 entries for each sandwich and return the data
@@ -282,43 +281,56 @@ def get_last_5_entires_ratio_values():
     for ind in range(1, 5):
         column = Ratio_data.col_values(ind)
         Ratio_data_array.append(column[-5:])
-
     
 
+    Data_list = []
+    for ind in range(0, 5):
+        column = Ratio_data_array[column_number][ind]
+        Data_list.append(column)
     
-    return Ratio_data_array
+    return Data_list
+    
+    
 
-def plot_barchart(data):
-    data = [item[2].split(",") for item in data]
+def plot_barchart(samples,data):
     print(data)
+    data_replace = [s.replace(',', '.') for s in data]
+    data_barchart = list(map(float, data_replace))
+
+    plotext.bar(samples, data_barchart)
+    plotext.title("Ratio 1")
+    plotext.show()
+    
+
+ 
 
     
 
    
-"""
-def Input_Data(folder, ext):
-    inputFileOK = False
-    while (inputFileOK == False):
-        try:
-            inputFileName = input("Enter name of input file: ")
-            inputFile = open(inputFileName, "r")
-        except IOError:
-            print("File", inputFileName, "could not be opened")
-        else:
-            print("Opening file", inputFileName, " for reading.")
-            inputFileOK = True
-            for line in inputFile:
-                sys.stdout.write(line)
-        print ("Completed reading of file", inputFileName)
-        inputFile.close()
-        print ("Closed file", inputFileName)
-        finally:
-            if (inputFileOK == True):
-                print ("Successfully read information from file",inputFileName)
-            else:
-                print ("Unsuccessfully attempted to read information from file", inputFileName)
-        
- """   
+def Input_Data():
+    
+	inputFileOK = False
+	while (inputFileOK == False):
+		try:
+			inputFileName = input("Enter name of input file: ")
+			inputFile = open(inputFileName, "r")
+		except IOError:
+			print("File", inputFileName, "could not be opened")
+		else:
+			print("Opening file", inputFileName, " for reading.")
+			inputFileOK = True
+			for line in inputFile:
+				sys.stdout.write(line)
+				print ("Completed reading of file", inputFileName)
+			inputFile.close()
+			print ("Closed file", inputFileName)
+		finally:
+			if (inputFileOK == True):
+				print ("Successfully read information from file",inputFileName)
+			else:
+				print ("Unsuccessfully attempted to read information from file", inputFileName)
+
+
 
 def Test_Data():
     """
@@ -353,21 +365,27 @@ def main():
     Run all program functions
     """
     
-    
-    barchart_data = get_last_5_entires_ratio_values()
-    plot_barchart(barchart_data)
+    #Input_Data()
+    barchart_data_sample = get_last_5_entires_ratio_values(0)
+    barchart_data_ratio1 = get_last_5_entires_ratio_values(1)
+    barchart_data_ratio2 = get_last_5_entires_ratio_values(2)
+    barchart_data_ratio3 = get_last_5_entires_ratio_values(3)
+    plot_barchart(barchart_data_sample,barchart_data_ratio1)
+    #plot_barchart(barchart_data_sample,barchart_data_ratio2)
+    #plot_barchart(barchart_data_sample,barchart_data_ratio3)
     #data = get_raw_data()
+
     #raw_data = [num for num in data]
     #update_worksheet(raw_data, "Raw_Data")
-    # Integration borders can be changed regarding your specifications 
+    #Integration borders can be changed regarding your specifications 
     #integrated_data = calculate_integration_area(raw_data,"500","300","100")
     #update_worksheet(integrated_data, "Integrated_Data")
-    # Sample= get_sample_name()
+    #Sample= get_sample_name()
     #ratio_data = calculate_ratio(integrated_data,Sample)
     #update_worksheet(ratio_data, "Calculation_index")
-    # High Limit, low Limit, high value, normal value, low value
-    #ratio_evaluation(10,0,5,3,1)
-    # title, xlabel, ylabel
+    #High Limit, low Limit, high value, normal value, low value
+    #ratio_evaluation(Sample,10,0,5,3,1)
+    #title, xlabel, ylabel
     #raw_data_plot_generation("Spectrum","Wavenumbers (1/cm)","Absorbance")
     
     # Test data of integration using the trapz numpy library 
@@ -375,5 +393,6 @@ def main():
     # Test_Data()
 
 print("Welcome to Spectral Data Automation")
+print(os.getcwd())
 main()
 
