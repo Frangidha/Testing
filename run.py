@@ -130,13 +130,14 @@ def calculate_ratio(Calculated_index, Sample):
     calculated by the previous function
     Use of division and addition
     """
-    print("Ratio index")
+    
     Calculated_index = []
     integration_data = SHEET.worksheet("Integrated_Data").get_all_values()   
     data = integration_data[-1]
     int1 = int(data[0])
     int2 = int(data[1])
     int3 = int(data[2])
+
     Calculated_index.append(Sample)
     Ratio1 = int2/int1
     Calculated_index.append(Ratio1)
@@ -170,56 +171,57 @@ def ratio_evaluation(Sample,High_Limit, Low_Limit, High_index, Medium_index, Low
     ratio1 = float(data[1])
     ratio2 = float(data[2])
     ratio3 = float(data[3])
-
+    print(f"Calculated Data Table:\n")
     print("{:<10} {:<10} {:<10} {:<10}".format(header, header1, header2, header3))
     print("{:<10} {:<10} {:<10} {:<10}".format(Sample , round(ratio1, 2), round(ratio2, 2), round(ratio3, 2)))
     data_evaluation = {}
-    print("Data Interpretation")
+    print("")
+    print("Data Interpretation:")
 
     if ratio1 > High_Limit:
-        print(f"{header1} seems to be outside the expected range")
+        print(f"{header1} seems to be outside the expected range\n")
     elif ratio1 > High_index:
-        print(f"{header1} seems to be quite high")
+        print(f"{header1} seems to be quite high\n")
     elif ratio1 > Medium_index:
-        print(f"{header1} seems to be quite normal")
+        print(f"{header1} seems to be quite normal\n")
     elif ratio1 > Low_index:
-        print(f"{header1} seems to be quite low")
+        print(f"{header1} seems to be quite low\n")
     elif ratio1 < Low_index:
-        print(f"{header1} seems to be Very low")
+        print(f"{header1} seems to be Very low\n")
     elif ratio1 < Low_Limit: 
-        print(f"{header1} is negative please remeasure")
+        print(f"{header1} is negative please remeasure\n")
         get_raw_data()
     else:
         print("oops something went wrong")
         get_raw_data()
     
     if ratio2 > High_Limit:
-        print(f"{header2} seems to be outside the expected range")
+        print(f"{header2} seems to be outside the expected range\n")
     elif ratio2 > High_index:
-        print(f"{header2} seems to be quite high")
+        print(f"{header2} seems to be quite high\n")
     elif ratio2 > Medium_index:
-        print(f"{header2} seems to be quite normal")
+        print(f"{header2} seems to be quite normal\n")
     elif ratio2 > Low_index:
-        print(f"{header2} seems to be quite low")
+        print(f"{header2} seems to be quite low\n")
     elif ratio2 < Low_index:
-        print(f"{header2} seems to be Very low")
+        print(f"{header2} seems to be Very low\n")
     elif ratio2 < Low_Limit: 
-        print(f"{header2} is negative please remeasure")
+        print(f"{header2} is negative please remeasure\n")
         get_raw_data()
     else:
         print("oops something went wrong")
         get_raw_data()
     
     if ratio3 > High_Limit:
-        print(f"{header3} seems to be outside the expected range")
+        print(f"{header3} seems to be outside the expected range\n")
     elif ratio3 > High_index:
-        print(f"{header3} seems to be quite high")
+        print(f"{header3} seems to be quite high\n")
     elif ratio3 > Medium_index:
-        print(f"{header3} seems to be quite normal")
+        print(f"{header3} seems to be quite normal\n")
     elif ratio3 > Low_index:
-        print(f"{header3} seems to be quite low")
+        print(f"{header3} seems to be quite low\n")
     elif ratio3 < Low_index:
-        print(f"{header3} seems to be Very low")
+        print(f"{header3} seems to be Very low\n")
     elif ratio3 < Low_Limit: 
         print(f"{header3} is negative please remeasure")
         get_raw_data()
@@ -237,7 +239,7 @@ def raw_data_plot_generation(title, xlabel, ylabel):
 
     """
 
-    print("The plot is generating, it will generate in a couple of seconds")
+    print(f"The plot is generating, it will generate in a couple of seconds...\n")
     
     integration_data = SHEET.worksheet("Raw_Data").get_all_values()
     
@@ -253,14 +255,15 @@ def raw_data_plot_generation(title, xlabel, ylabel):
     
     
     plotext.scatter(xdata, ydata)
-    plotext.title(title)
+    plotext.title(f"Spectrum of {title}")
     plotext.xlabel(xlabel)
     plotext.ylabel(ylabel)
     plotext.show()
+    plotext.clear_figure()
 
 def get_sample_name():
     """
-    get the last sample Name.
+    get the name of the last sample.
     """
 
     Sample_Name = SHEET.worksheet("Raw_Data")
@@ -270,8 +273,8 @@ def get_sample_name():
 
 def get_last_5_entires_ratio_values(column_number):
     """
-    Collect columns of data from sales worksheet.
-    Get the last 5 entries for each sandwich and return the data
+    Collect columns of data from calculation worksheet.
+    Get the last 5 entries for each sample and return the data
     as a list of lists.
     """
 
@@ -292,23 +295,23 @@ def get_last_5_entires_ratio_values(column_number):
     
     
 
-def plot_barchart(samples,data):
-    print(data)
+def plot_barchart(samples,data,ratio):
+
+    """
+    take al the Data and combine them to make the plot of the last 
+    5 entries to see the evolution of trends
+    """
+    print(f"{ratio} is being generated\n")
     data_replace = [s.replace(',', '.') for s in data]
     data_barchart = list(map(float, data_replace))
-
+    plotext.plotsize(100, 30)
     plotext.bar(samples, data_barchart)
-    plotext.title("Ratio 1")
+    plotext.title(ratio)
     plotext.show()
+    plotext.clear_figure()
     
-
- 
-
     
-
-   
 def Input_Data():
-    
 	inputFileOK = False
 	while (inputFileOK == False):
 		try:
@@ -329,7 +332,6 @@ def Input_Data():
 				print ("Successfully read information from file",inputFileName)
 			else:
 				print ("Unsuccessfully attempted to read information from file", inputFileName)
-
 
 
 def Test_Data():
@@ -366,33 +368,33 @@ def main():
     """
     
     #Input_Data()
+    
+    
+    data = get_raw_data()
+    raw_data = [num for num in data]
+    update_worksheet(raw_data, "Raw_Data")
+    Sample= get_sample_name()
+    raw_data_plot_generation(Sample,"Wavenumbers (1/cm)","Absorbance")
+    #Integration borders can be changed regarding your specifications 
+    integrated_data = calculate_integration_area(raw_data,"500","300","100")
+    update_worksheet(integrated_data, "Integrated_Data")
+    ratio_data = calculate_ratio(integrated_data,Sample)
+    update_worksheet(ratio_data, "Calculation_index")
+    #High Limit, low Limit, high value, normal value, low value
+    ratio_evaluation(Sample,10,0,5,3,1)
+    #title, xlabel, ylabel
     barchart_data_sample = get_last_5_entires_ratio_values(0)
     barchart_data_ratio1 = get_last_5_entires_ratio_values(1)
     barchart_data_ratio2 = get_last_5_entires_ratio_values(2)
     barchart_data_ratio3 = get_last_5_entires_ratio_values(3)
-    plot_barchart(barchart_data_sample,barchart_data_ratio1)
-    #plot_barchart(barchart_data_sample,barchart_data_ratio2)
-    #plot_barchart(barchart_data_sample,barchart_data_ratio3)
-    #data = get_raw_data()
-
-    #raw_data = [num for num in data]
-    #update_worksheet(raw_data, "Raw_Data")
-    #Integration borders can be changed regarding your specifications 
-    #integrated_data = calculate_integration_area(raw_data,"500","300","100")
-    #update_worksheet(integrated_data, "Integrated_Data")
-    #Sample= get_sample_name()
-    #ratio_data = calculate_ratio(integrated_data,Sample)
-    #update_worksheet(ratio_data, "Calculation_index")
-    #High Limit, low Limit, high value, normal value, low value
-    #ratio_evaluation(Sample,10,0,5,3,1)
-    #title, xlabel, ylabel
-    #raw_data_plot_generation("Spectrum","Wavenumbers (1/cm)","Absorbance")
-    
+    plot_barchart(barchart_data_sample,barchart_data_ratio1,"ratio 1")
+    plot_barchart(barchart_data_sample,barchart_data_ratio2,"ratio 2")
+    plot_barchart(barchart_data_sample,barchart_data_ratio3,"ratio 3")
     # Test data of integration using the trapz numpy library 
     # comparing to the classical method
     # Test_Data()
 
 print("Welcome to Spectral Data Automation")
-print(os.getcwd())
+
 main()
 
