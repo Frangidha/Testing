@@ -21,6 +21,25 @@ SCOPED_CREDS = CREDS.with_scopes(SCOPE)
 GSPREAD_CLIENT = gspread.authorize(SCOPED_CREDS)
 SHEET = GSPREAD_CLIENT.open('data_treatment')
 
+def launch_raw_data(old_data, new_data, range_data):
+    """
+    Get Raw figures input from the user.
+    Run a while loop to collect a valid string of data from the user
+    via the terminal, which must be a string of x numbers separated
+    by commas. The loop will repeatedly request data, until it is valid.
+    """
+    while True:
+        print("Please enter raw data in the google drive form.")
+        print("Data should be the same range as the other samples")
+        print("Put the Data in https://docs.google.com/spreadsheets/d/1cEWBDHZ35fzQ320SUUwLCcgsBtijk0C3keXW9kgA0Uc/edit#gid=0")
+        print("Example: Sample, 10,20,30,40,50,60\n")
+
+        confirmation = input("have you put in your datal please confirm by typing 'x': ")
+
+
+        if validate_drive_data(confirmation, old_data, new_data, range_data):
+            print("Data is valid!")
+            break
 
 def get_raw_data():
     """
@@ -45,19 +64,42 @@ def get_raw_data():
     return raw_data
 
 
-def validate_data(values):
+def validate_drive_data(confirmation, old_data, new_data, range_data):
     """
     Inside the try, converts all string values into integers.
     Raises ValueError if strings cannot be converted into int,
     or if there aren't exactly 6 values.
     """
     try:
-        for value in values[1:]:
-            int(value[1:])
-        if len(values) != 6:
-            raise ValueError(
-                f"Exactly 6 values required, you provided {len(values)}"
-            )
+        if confirmation == 'x':
+            raw_data = SHEET.worksheet("Raw_Data")
+            
+            if  old_data < new_data:
+                data_array = []
+                
+                lenght_data = []
+                for ind in range(1, range_data):
+                    column = raw_data.row_values(ind)
+                    data_array.append(column[1:])
+                for list in data_array:
+                    for number in list:
+                        float(number)
+                
+                 
+                for x in data_array:
+                    lenght_data.append(len(x))
+                
+                highest_value_input = max(lenght_data)
+                lowest_value_input = min(lenght_data)
+                if highest_value_input != lenght_data[0]:
+                    raise ValueError(f"too many data points({highest_value_input})")
+                elif lowest_value_input != lenght_data[0]:
+                    raise ValueError(f"not enough data points({lowest_value_input})")
+                
+            else:
+                raise ValueError(f"did you add new Data?")
+                
+                             
     except ValueError as e:
         print(f"Invalid data: {e}, please try again.\n")
         return False
@@ -86,7 +128,6 @@ def calculate_integration_area(integration_row, intLim1, intLim2, intLim3):
     by evaluating the integrand at n points.
     Let [a,b] be the interval of integration with a partition a=x0<x1<…<xn=b.
     more info: https://planetmath.org/compositetrapezoidalrule
-.
     """
     
     print("Calculating integration data...\n")
@@ -100,7 +141,7 @@ def calculate_integration_area(integration_row, intLim1, intLim2, intLim3):
     integration_border_Two = xdata.index(intLim2)
     integration_border_Three = xdata.index(intLim3)
 
-    ydata = data_after[list(data_after)[-1]]
+    ydata = data_after[list(data_after)[integration_row]]
     
     xdata = [int(i) for i in xdata]
     ydata = [int(i) for i in ydata]
@@ -310,28 +351,8 @@ def plot_barchart(samples,data,ratio):
     plotext.show()
     plotext.clear_figure()
     
-    
-def Input_Data():
-	inputFileOK = False
-	while (inputFileOK == False):
-		try:
-			inputFileName = input("Enter name of input file: ")
-			inputFile = open(inputFileName, "r")
-		except IOError:
-			print("File", inputFileName, "could not be opened")
-		else:
-			print("Opening file", inputFileName, " for reading.")
-			inputFileOK = True
-			for line in inputFile:
-				sys.stdout.write(line)
-				print ("Completed reading of file", inputFileName)
-			inputFile.close()
-			print ("Closed file", inputFileName)
-		finally:
-			if (inputFileOK == True):
-				print ("Successfully read information from file",inputFileName)
-			else:
-				print ("Unsuccessfully attempted to read information from file", inputFileName)
+
+
 
 
 def Test_Data():
@@ -361,35 +382,44 @@ def Test_Data():
     else: 
         print("please check the programme")
 
+def loop_data():
+    raw_data = SHEET.worksheet("Raw_Data").get_all_values()
+    integration_data = SHEET.worksheet("Integrated_Data").get_all_values()
+    new_data = len(raw_data)
+    old_data_rows = len(integration_data)
+    range_data = int(new_data) + 1 
+    loop = new_data - old_data_rows + 1
+        
+        
+    return old_data_rows, new_data, range_data, loop
 
 def main():
     """
     Run all program functions
     """
-    
-    #Input_Data()
-    
-    
-    data = get_raw_data()
-    raw_data = [num for num in data]
-    update_worksheet(raw_data, "Raw_Data")
-    Sample= get_sample_name()
-    raw_data_plot_generation(Sample,"Wavenumbers (1/cm)","Absorbance")
+    old_data , new_data, range_data, loop = loop_data()
+    launch_raw_data(old_data, new_data, range_data)
+    #data = get_raw_data()
+    #raw_data = [num for num in data]
+    #update_worksheet(raw_data, "Raw_Data")
+    for i in reversed(range(1,loop)):
+    #Sample= get_sample_name()
+    #raw_data_plot_generation(Sample,"Wavenumbers (1/cm)","Absorbance")
     #Integration borders can be changed regarding your specifications 
-    integrated_data = calculate_integration_area(raw_data,"500","300","100")
-    update_worksheet(integrated_data, "Integrated_Data")
-    ratio_data = calculate_ratio(integrated_data,Sample)
-    update_worksheet(ratio_data, "Calculation_index")
-    #High Limit, low Limit, high value, normal value, low value
-    ratio_evaluation(Sample,10,0,5,3,1)
+    #integrated_data = calculate_integration_area(row,"500","300","100")
+    #update_worksheet(integrated_data, "Integrated_Data")
+    #ratio_data = calculate_ratio(integrated_data,Sample)
+    #update_worksheet(ratio_data, "Calculation_index")
+    #High Limit, low Limit, high value, normal, value, low value
+    #ratio_evaluation(Sample,10,0,5,3,1)
     #title, xlabel, ylabel
-    barchart_data_sample = get_last_5_entires_ratio_values(0)
-    barchart_data_ratio1 = get_last_5_entires_ratio_values(1)
-    barchart_data_ratio2 = get_last_5_entires_ratio_values(2)
-    barchart_data_ratio3 = get_last_5_entires_ratio_values(3)
-    plot_barchart(barchart_data_sample,barchart_data_ratio1,"ratio 1")
-    plot_barchart(barchart_data_sample,barchart_data_ratio2,"ratio 2")
-    plot_barchart(barchart_data_sample,barchart_data_ratio3,"ratio 3")
+    #barchart_data_sample = get_last_5_entires_ratio_values(0)
+    #barchart_data_ratio1 = get_last_5_entires_ratio_values(1)
+    #barchart_data_ratio2 = get_last_5_entires_ratio_values(2)
+    #barchart_data_ratio3 = get_last_5_entires_ratio_values(3)
+    #plot_barchart(barchart_data_sample,barchart_data_ratio1,"ratio 1")
+    #plot_barchart(barchart_data_sample,barchart_data_ratio2,"ratio 2")
+    #plot_barchart(barchart_data_sample,barchart_data_ratio3,"ratio 3")
     # Test data of integration using the trapz numpy library 
     # comparing to the classical method
     # Test_Data()
