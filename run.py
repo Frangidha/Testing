@@ -14,9 +14,9 @@ each manipulation of the data.
 x_axes = "Wavenumbers (1/cm)"
 y_axes = "Absorbance"
 # Integration limit variable 
-int_limit1 = "10.00000"
-int_limit2 = "30.00000"
-int_limit3 = "50.00000"
+int_limit1 = 798.892
+int_limit2 = 1688.416
+int_limit3 = 1896.809
 # how to set your limit variables to get the requested comments
 high_limit = 10
 low_limit = 0
@@ -171,6 +171,7 @@ def calculate_integration_area(sample, intLim1, intLim2, intLim3):
     data_after = {e[0]: e[1:] for e in integration_data}
     xdata = data_after['Wavenumbers']
     xdata = [s.replace(',', '') for s in xdata]
+   
     
     ydata = data_after[sample]
     ydata = [s.replace(',', '') for s in ydata]
@@ -189,17 +190,13 @@ def calculate_integration_area(sample, intLim1, intLim2, intLim3):
     integration_row.append(total_int)
     # integrate the entire data-set
     xdata_int_1 = xdata[integration_border_Two:integration_border_Three]
-    print(xdata_int_1)
     ydata_int_1 = ydata[integration_border_Two:integration_border_Three]
-    print(ydata_int_1)
     partial_int = np.trapz(ydata_int_1, xdata_int_1)
 
     integration_row.append(partial_int)
 
     xdata_int_2 = xdata[integration_border_One:integration_border_Two]
-    print(xdata_int_2)
     ydata_int_2 = ydata[integration_border_One:integration_border_Two]
-    print(ydata_int_2)
     partial_int_2 = np.trapz(ydata_int_2, xdata_int_2)
     integration_row.append(partial_int_2)
 
@@ -258,8 +255,8 @@ def ratio_evaluation(Sample, High_Limit, Low_Limit, High_index, Medium_index, Lo
     ratio3 = float(data[3])
     print("Calculated Data Table:\n")
     # the date table 
-    print("{:<5} {:<15} {:<15} {:<15}".format(header, header1, header2, header3))
-    print("{:<5} {:<15} {:<15} {:<15}".format(Sample, round(ratio1, 3), round(ratio2, 3), round(ratio3, 3)))
+    print("{:<15} {:<15} {:<15} {:<15}".format(header, header1, header2, header3))
+    print("{:<15} {:<15} {:<15} {:<15}".format(Sample, round(ratio1, 3), round(ratio2, 3), round(ratio3, 3)))
     
     print("")
     print("Data Interpretation:")
@@ -424,7 +421,7 @@ def Test_Data():
     if (int_test1 == 646000):
         # exponential function Data instead of a absolute value it is ratio that checks that the data doesn't deviate 5%. otherwise it will display a fault message.
         if (deviation > Low_Limit):
-            print("the linear integration is the same as the ")
+            print("the linear integration is the same as the calculated value")
             if (deviation < High_Limit):
                 print("the exponential integration is within the range")
         else: 
@@ -481,12 +478,12 @@ def main():
     plot_barchart(barchart_data_sample, barchart_data_ratio1, header1)
     plot_barchart(barchart_data_sample, barchart_data_ratio2, header2)
     plot_barchart(barchart_data_sample, barchart_data_ratio3, header3)
-    # Test data of integration using the trapz numpy library 
-    # comparing to the classical method
-    # Test_Data()
-
-
+   
+    
 print("Welcome to Spectral Data Automation")
 
 main()
 
+# Test data of integration using the trapz numpy library 
+# comparing to the classical method
+# Test_Data()
