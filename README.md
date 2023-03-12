@@ -130,7 +130,7 @@ As a future enhancement, I would like to add some basic functionality to have an
 
 <h3>Pep8 Validation</h3>
 
-<p>All python code was ran through pep8online.com validator and any warnings or errors were fixed. Code then validated successfully.</p>
+<p>All python code was ran through pep8online.com validator and any warnings or errors were fixed. Code then validated successfully.(<a href="https://pep8ci.herokuapp.com/" target="_blank">Link to validator</a>)</p>
 
 <p>In gitpod, warning was displayed by linter that string statement has no effect at line 6 but this is mainly used for documentation.
 Unuses variables because this function give 4 output and is different variables are used in different functions but all variables are used. So this warning is ignored.</p>
@@ -183,7 +183,7 @@ The below steps were followed to deploy this project to Heroku:
 
 <h5>StackOverflow</h5>
 <p>was used for certain bug fixes which were encounterd during the programming process so could find what the problem was and give guidance on solution</p>
-<h5>Core Science Resources(<a href="https://csr.quadram.ac.uk/example-datasets-for-download/">link</a>)</h5>
+<h5>Core Science Resources(<a href="https://csr.quadram.ac.uk/example-datasets-for-download/">Link</a>)</h5>
 <p>the used spectra for this applications were obtained by Henri S. Tapp, Marianne Defernez, and E. Katherine Kemsley</p>
-<h5>Code insitute</h5>
-<p>the code insitute curriculum was used to develop the entire application. Mainly the love-sandwiches project was great inspiration to find out how to connect the file to google sheets.(<a href="github.com/Code-Institute-Solutions/love-sandwiches">link</a>)</p>
+<h5>Code insitute(<a href="github.com/Code-Institute-Solutions/love-sandwiches">Link</a>)</h5>
+<p>the code insitute curriculum was used to develop the entire application. Mainly the love-sandwiches project was great inspiration to find out how to connect the file to google sheets.</p>
