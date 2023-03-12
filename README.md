@@ -39,7 +39,7 @@ environment which requires no/minimal training to use</li>
 <h3>IMPLEMENTATION</h3>
 <li>API to google sheets</li>
 <p>excel is a familiar environment for many user so it will be an ideal place to do this.</p>
-<p>Also a userguide is provided(<a href="https://docs.google.com/document/d/15TESpf-30ibR4NBzRKcN6XyxgjuNqkzDge-6oaH0oxI/edit?usp=sharing" target = "_blank">Link to User Guide</a>)</p>
+<p>Also a userguide is provided(<a href="https://docs.google.com/document/d/15TESpf-30ibR4NBzRKcN6XyxgjuNqkzDge-6oaH0oxI/edit?usp=sharing" target="_blank">Link to User Guide</a>)</p>
 
 <img src="readme/images/google sheets .jpg" alt="google sheets example input form">
 <li>The user will put the data as required in this application in the google sheets Raw_Data file</li><a href="https://docs.google.com/spreadsheets/d/1cEWBDHZ35fzQ320SUUwLCcgsBtijk0C3keXW9kgA0Uc/edit#gid=0" target="_blank">link to input file</a>
@@ -122,7 +122,7 @@ As a future enhancement, I would like to add some basic functionality to have an
 <li>Gspread</li>
 <li>google.oauth2.service_account</li>
 </ul>
-<li>Time packages was imported to slow down the code for 5 second to not overload the API</li>
+<li>Time packages was imported to slow down the code for 10 second to not overload the API</li>
 </ul>
 <h2>Testing</h2>
 <img src="readme/images/Testing.jpg" alt="picture of the landingpage of the website">
