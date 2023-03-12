@@ -130,10 +130,10 @@ As a future enhancement, I would like to add some basic functionality to have an
 
 <h3>Pep8 Validation</h3>
 
-All python code was ran through pep8online.com validator and any warnings or errors were fixed. Code then validated successfully.
+<p>All python code was ran through pep8online.com validator and any warnings or errors were fixed. Code then validated successfully.</p>
 
-In gitpod, warning was displayed by linter that string statement has no effect at line 6 but this is mainly used for documentation.
-Unuses variables because this function give 4 output and is different variables are used in different functions but all variables are used. So this warning is ignored.
+<p>In gitpod, warning was displayed by linter that string statement has no effect at line 6 but this is mainly used for documentation.
+Unuses variables because this function give 4 output and is different variables are used in different functions but all variables are used. So this warning is ignored.</p>
 <img src="readme/images/Results.jpg" alt="No Error PEP8" />
 
 <h3>Bugs and fixes</h3>
