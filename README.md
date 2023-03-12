@@ -173,7 +173,7 @@ The below steps were followed to deploy this project to Heroku:
 <h3>Clone Locally</h3>
 <ul>
 <li>Open IDE of choice and type the following into the terminal:</li>
-<li>git clone xxx</li>
+<li>git clone TODO</li>
 <li>Project will now be cloned locally.</li>
 <li>Open your IDE of choice (git must be installed for the next steps)</li>
 <li>Type git clone copied-git-url into the IDE terminal</li>
@@ -186,4 +186,4 @@ The below steps were followed to deploy this project to Heroku:
 <h5>Core Science Resources(<a href="https://csr.quadram.ac.uk/example-datasets-for-download/">link</a>)</h5>
 <p>the used spectra for this applications were obtained by Henri S. Tapp, Marianne Defernez, and E. Katherine Kemsley</p>
 <h5>Code insitute</h5>
-<p>the code insitute curriculum was used to develop the entire application. Mainly the love-sandwiches project was great inspiration to find out how to connect the file to google sheets.<a href="github.com/Code-Institute-Solutions/love-sandwiches">link</a></p>
+<p>the code insitute curriculum was used to develop the entire application. Mainly the love-sandwiches project was great inspiration to find out how to connect the file to google sheets.(<a href="github.com/Code-Institute-Solutions/love-sandwiches">link</a>)</p>
